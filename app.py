@@ -1,103 +1,141 @@
 import os
+import logging
 import requests
 import pywhatkit as kit
 from dotenv import load_dotenv
+from typing import Dict, Any, Optional
+import time
 
 # Load environment variables from .env file
 load_dotenv()
 
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Constants
+SEND_STATUS_KEY = "Send Status "
+NOTION_API_VERSION = "2022-06-28"
+
 # Notion API details
 NOTION_TOKEN = os.getenv("NOTION_TOKEN")
 DATABASE_ID = os.getenv("DATABASE_ID")
-WHATSAPP_GROUP_LINK = os.getenv("WHATSAPP_GROUP_LINK")
+WHATSAPP_GROUP_ID = os.getenv("WHATSAPP_GROUP_ID")
+
+# Validate environment variables
+if not all([NOTION_TOKEN, DATABASE_ID, WHATSAPP_GROUP_ID]):
+    logger.error("Missing required environment variables.")
+    exit(1)
 
 HEADERS = {
     "Authorization": f"Bearer {NOTION_TOKEN}",
-    "Notion-Version": "2022-06-28",  # Use the latest version
+    "Notion-Version": NOTION_API_VERSION,
     "Content-Type": "application/json"
 }
 
-def query_notion_database():
+def query_notion_database() -> Optional[Dict[str, Any]]:
     """Fetch data from the Notion database."""
     url = f"https://api.notion.com/v1/databases/{DATABASE_ID}/query"
-    response = requests.post(url, headers=HEADERS)
-    if response.status_code == 200:
+    try:
+        response = requests.post(url, headers=HEADERS)
+        response.raise_for_status()
         return response.json()
-    else:
-        print(f"Error: {response.status_code}, {response.text}")
+    except requests.exceptions.RequestException as e:
+        logger.error(f"Error querying Notion database: {e}")
         return None
 
-def format_message(item):
+def get_property_value(properties: Dict[str, Any], key: str, default: str = "No Info") -> str:
+    """Helper function to extract property values from Notion properties."""
+    prop = properties.get(key, {})
+    if "title" in prop:
+        return prop["title"][0].get("text", {}).get("content", default)
+    elif "rich_text" in prop:
+        return prop["rich_text"][0].get("text", {}).get("content", default)
+    elif "select" in prop:
+        return prop["select"].get("name", default)
+    elif "url" in prop:
+        return prop.get("url", default)
+    return default
+
+def format_message(item: Dict[str, Any]) -> str:
     """Format the message using the provided template."""
     properties = item.get("properties", {})
-    role = properties.get("Role", {}).get("title", [{}])[0].get("text", {}).get("content", "No Role")
-    startup = properties.get("Startup", {}).get("rich_text", [{}])[0].get("text", {}).get("content", "No Startup")
-    location = properties.get("Location", {}).get("rich_text", [{}])[0].get("text", {}).get("content", "No Location")
-    remote = properties.get("Remote", {}).get("select", {}).get("name", "No Remote Info")
-    vertical = properties.get("Vertical", {}).get("select", {}).get("name", "No Vertical Info")
-    ai_summary = properties.get("AI summary", {}).get("rich_text", [{}])[0].get("text", {}).get("content", "No AI Summary")
-    apply_url = properties.get("Apply URL", {}).get("url", "No Apply URL")
+    role = get_property_value(properties, "Role", "No Role")
+    startup = get_property_value(properties, "Startup", "No Startup")
+    location = get_property_value(properties, "Location", "No Location")
+    remote = get_property_value(properties, "Remote", "No Remote Info")
+    vertical = get_property_value(properties, "Vertical", "No Vertical Info")
+    ai_summary = get_property_value(properties, "AI summary", "No AI Summary")
+    apply_url = get_property_value(properties, "Apply URL", "No Apply URL")
 
     # Format the message
     message = (
-        f"📢 Nueva oportunidad de trabajo\n"
-        f"🔹 Rol: {role}\n"
-        f"🏢 Startup: {startup}\n"
-        f"🌍 Ubicación: {location} ({remote})\n"
-        f"📂 Vertical: {vertical}\n"
-        f"🤖 Resumen: {ai_summary}\n"
-        f"📩 Aplica aquí: {apply_url}"
+        f"📢 *Nueva oportunidad de trabajo*\n\n"
+        f"- 🔹 *Rol:* {role}\n\n"
+        f"- 🏢 *Startup:* {startup}\n"
+        f"- 🌍 *Ubicación:* {location} ({remote})\n"
+        f"- 📂 *Vertical:* {vertical}\n"
+        f"- 🤖 *Resumen:* {ai_summary}\n\n"
+        f"- 📩 *Aplica aquí:* {apply_url}"
     )
     return message
 
-def send_to_whatsapp_group(message):
-    """Send a message to the WhatsApp group using the group invite link."""
+def send_to_whatsapp_group(message: str) -> bool:
+    """Send a message to the WhatsApp group using the group ID."""
     try:
-        # Open the group invite link in the browser
-        kit.sendwhatmsg_to_group_using_link(
-            group_invite_link=WHATSAPP_GROUP_LINK,
+        # Add a delay to ensure WhatsApp Web is fully loaded
+        time.sleep(10)  # Wait for 10 seconds before sending the message
+
+        # Send the message with a longer wait_time
+        kit.sendwhatmsg_to_group_instantly(
+            group_id=WHATSAPP_GROUP_ID,
             message=message,
-            wait_time=15,
+            wait_time=20,  # Increase wait time to ensure instant sending
             tab_close=True
         )
-        print("Message sent successfully!")
+        logger.info("Message sent successfully!")
+        return True
     except Exception as e:
-        print(f"Error: {e}")
+        logger.error(f"Error sending message to WhatsApp group: {e}")
+        return False
 
-def update_send_status(page_id):
+def update_send_status(page_id: str) -> bool:
     """Update the 'Send Status' to 'Sent' in Notion."""
     url = f"https://api.notion.com/v1/pages/{page_id}"
     data = {
         "properties": {
-            "Send Status ": {  # Note the trailing space
+            SEND_STATUS_KEY: {
                 "status": {
                     "name": "Sent"
                 }
             }
         }
     }
-    response = requests.patch(url, headers=HEADERS, json=data)
-    if response.status_code == 200:
-        print(f"Updated Send Status for page {page_id}")
-    else:
-        print(f"Error updating Send Status: {response.status_code}, {response.text}")
+    try:
+        response = requests.patch(url, headers=HEADERS, json=data)
+        response.raise_for_status()
+        logger.info(f"Updated Send Status for page {page_id}")
+        return True
+    except requests.exceptions.RequestException as e:
+        logger.error(f"Error updating Send Status: {e}")
+        return False
 
 def main():
     # Retrieve data from Notion
     notion_data = query_notion_database()
     if notion_data:
         for item in notion_data.get("results", []):
-            send_status = item.get("properties", {}).get("Send Status ", {}).get("status", {}).get("name", "")
-            print(f"Debug - Send Status: '{send_status}'")  # Debug line
+            send_status = item.get("properties", {}).get(SEND_STATUS_KEY, {}).get("status", {}).get("name", "")
+            logger.debug(f"Debug - Send Status: '{send_status}'")
             if send_status == "Not Sent":
                 # Format the message
                 message = format_message(item)
                 # Send the message to WhatsApp
-                send_to_whatsapp_group(message)
-                # Update the "Send Status" to "Sent" in Notion
-                update_send_status(item["id"])
+                if send_to_whatsapp_group(message):
+                    # Update the "Send Status" to "Sent" in Notion
+                    update_send_status(item["id"])
             else:
-                print(f"Skipping item with Send Status: '{send_status}'")
+                logger.info(f"Skipping item with Send Status: '{send_status}'")
 
 if __name__ == "__main__":
     main()
