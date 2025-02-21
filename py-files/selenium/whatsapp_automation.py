@@ -5,6 +5,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
 from dotenv import load_dotenv
 from typing import Dict, Any, Optional
 import time
@@ -35,12 +36,24 @@ if not all([NOTION_TOKEN, DATABASE_ID, WHATSAPP_GROUP_NAME]):
     logger.error("Missing required environment variables.")
     exit(1)
 
+# Notion API headers
+HEADERS = {
+    "Authorization": f"Bearer {NOTION_TOKEN}",
+    "Notion-Version": NOTION_API_VERSION,
+    "Content-Type": "application/json"
+}
+
 # Path to ChromeDriver
 CHROMEDRIVER_PATH = r'C:\Users\ACER\Documents\Coding Projects Windows\agenteWhastapp\chromedriver-win64\chromedriver.exe'
 
 # Set up Selenium WebDriver
 service = Service(CHROMEDRIVER_PATH)
-driver = webdriver.Chrome(service=service)
+
+# Specify Chrome binary location (if Chrome is not in the default location)
+chrome_options = Options()
+chrome_options.binary_location = r'C:\Program Files\Google\Chrome\Application\chrome.exe'  # Update this path if necessary
+
+driver = webdriver.Chrome(service=service, options=chrome_options)
 
 def query_notion_database() -> Optional[Dict[str, Any]]:
     """Fetch data from the Notion database."""
@@ -107,7 +120,7 @@ def send_to_whatsapp_group(message: str) -> bool:
         time.sleep(2)
 
         # Locate the message input box and send the message
-        message_box = driver.find_element(By.XPATH, '//div[@contenteditable="true"][@data-tab="1"]')
+        message_box = driver.find_element(By.XPATH, '//*[@id="main"]/footer/div[1]/div/span/div/div[2]/div[1]/div[2]/div[1]/p')
         message_box.send_keys(message)
         message_box.send_keys(Keys.ENTER)
 

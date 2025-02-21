@@ -1,3 +1,4 @@
 venv/
 .env
 chromedriver-win64/
+PyWhatKit_DB

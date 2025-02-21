@@ -43,16 +43,26 @@ If you're using `requirements.txt`:
 pip install -r requirements.txt
 ```
 
+### 5. Update the core.py file
+Once the dependecies are instalated, you must fund the `core.py` file 
+```sh
+venv > lib > pywhatkit > core > core.py
+```
+and **replace all the code** with code from the `toreplace_corepy.py` file
+```sh
+py-files > pywhatkit > toreplace_corepy.py
+```
 
-### 5. Run the Project
+
+### 6. Run the Project
 Once inside the virtual environment, you can run your Python scripts as usual:
 After setting up the files execute them, eg. `app.py` with:
 ```sh
-python py-files/app.py
+python py-files\pywhatkit\app.py
 ```
 Or, if using Poetry:
 ```sh
-poetry run python py-files/app.py
+poetry run python py-files\pywhatkit\app.py 
 ```
 
 ---
