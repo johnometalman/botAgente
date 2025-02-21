@@ -4,3 +4,7 @@ python-dotenv
 poetry
 pywhatkit
 requests
+pywin32
+pyperclip
+pillow
+pyautogui
