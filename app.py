@@ -6,6 +6,8 @@ from dotenv import load_dotenv
 from typing import Dict, Any, Optional
 import time
 
+# this app sends the available positions to a WhatsApp Group
+
 # Load environment variables from .env file
 load_dotenv()
 
