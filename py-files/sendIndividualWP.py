@@ -9,7 +9,7 @@ load_dotenv()
 # Notion API details
 NOTION_TOKEN = os.getenv("NOTION_TOKEN")
 DATABASE_ID = os.getenv("DATABASE_ID")
-WHATSAPP_NUMBER = "+593996676098"  # Replace with your WhatsApp number
+WHATSAPP_NUMBER = os.getenv("WHATSAPP_NUMBER")
 
 HEADERS = {
     "Authorization": f"Bearer {NOTION_TOKEN}",

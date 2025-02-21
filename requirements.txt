@@ -1,3 +1,5 @@
+# Optional if you are using pip instead of poetry
+
 python-dotenv
 pywhatkit
 requests

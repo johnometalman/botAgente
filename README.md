@@ -26,23 +26,33 @@ git clone git@github.com:johnometalman/botAgente.git
 cd botAgente
 ```
 
-### 3. Install Dependencies
+### 3. Create an activate Virtual Environment
+```sh
+python -m venv venv
+source venv/bin/activate  # On macOS/Linux
+venv\Scripts\activate    # On Windows
+```
+
+### 4. With Venv activated install Dependencies
+Using Poetry:
 ```sh
 poetry install
 ```
-This will create a virtual environment and install all required dependencies.
-
-### 4. Activate Virtual Environment (Optional)
-Poetry manages its own virtual environments, but you can activate it manually if needed:
-
+If you're using `requirements.txt`:
 ```sh
-poetry shell
+pip install -r requirements.txt
 ```
+
 
 ### 5. Run the Project
 Once inside the virtual environment, you can run your Python scripts as usual:
+After setting up the files execute them, eg. `app.py` with:
 ```sh
-python app.py
+python py-files/app.py
+```
+Or, if using Poetry:
+```sh
+poetry run python py-files/app.py
 ```
 
 ---
@@ -80,6 +90,7 @@ This project relies on environment variables stored in a `.env` file. Create a `
 NOTION_TOKEN=your_notion_token
 DATABASE_ID=your_database_id
 WHATSAPP_GROUP_ID=your_whatsapp_group_id
+WHATSAPP_NUMBER=your_whatsapp_number_here
 ```
 
 ---
@@ -108,5 +119,5 @@ This project is licensed under [MIT License](LICENSE).
 
 ### Author
 John J Meza  
-📧 johnometalmanldu@gmail.com
+@johnometalman
 
