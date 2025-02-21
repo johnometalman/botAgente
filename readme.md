@@ -20,9 +20,9 @@ Or install it using the official method:
 curl -sSL https://install.python-poetry.org | python3 -
 ```
 
-### 2. Clone the Repository
+### 2. Clone the Repository using SSH
 ```sh
-git clone https://github.com/yourusername/botAgente.git
+git clone git@github.com:johnometalman/botAgente.git
 cd botAgente
 ```
 
