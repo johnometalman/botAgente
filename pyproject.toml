@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "botagente"
+version = "0.1.0"
+description = "A sample project"
+authors = ["John J Meza <johnometalmanldu@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+python-dotenv = "^1.0.0"
+pywhatkit = "^5.4"
+requests = "^2.28.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
