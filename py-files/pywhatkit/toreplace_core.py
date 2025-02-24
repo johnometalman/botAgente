@@ -1,7 +1,7 @@
 import os
 import pathlib
 import time
-import pyperclip  # Added import
+import pyperclip
 from platform import system
 from urllib.parse import quote
 from webbrowser import open
@@ -51,7 +51,7 @@ def _web(receiver: str, message: str) -> None:
             + quote(message)
         )
     else:
-        open("https://web.whatsapp.com/accept?code=" + receiver)  # Removed extra quote
+        open("https://web.whatsapp.com/accept?code=" + receiver)
 
 
 def send_message(message: str, receiver: str, wait_time: int = 10) -> None:

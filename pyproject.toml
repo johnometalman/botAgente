@@ -1,7 +1,7 @@
 [tool.poetry]
 package-mode = false
 name = "botagente"
-version = "0.2.0"
+version = "0.2.1"
 description = "A sample project"
 authors = ["John J Meza <johnometalmanldu@gmail.com>"]
 readme = "README.md"
@@ -9,17 +9,12 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.10"
 python-dotenv = "^1.0.0"
+pywhatkit = "^5.4"
 requests = "^2.28.0"
-pyperclip = "^1.8.2"  # Cross-platform clipboard support
-pillow = "^10.0.0"    # Cross-platform image handling
-pyautogui = "^0.9.54" # Cross-platform GUI automation
-pywhatkit = "^5.4"    # Add pywhatkit here
-
-# Platform-specific dependencies
-pywin32 = {version = "^306", markers = "sys_platform == 'win32'"}  # Windows only
-python3-xlib = {version = "^0.15", markers = "sys_platform == 'linux'"}  # Linux only
-pyobjc-core = {version = "^9.2", markers = "sys_platform == 'darwin'"}  # macOS only
-pyobjc-framework-Quartz = {version = "^9.2", markers = "sys_platform == 'darwin'"}  # macOS clipboard support
+pyperclip = "^1.8.2"  # Added for clipboard support
+Pillow = "^10.0.0"    # Added for image handling
+pywin32 = "^306"      # Added for Windows clipboard support (Windows only)
+pyautogui = "^0.9.54" # Ensure latest version for better compatibility
 
 [build-system]
 requires = ["poetry-core"]
