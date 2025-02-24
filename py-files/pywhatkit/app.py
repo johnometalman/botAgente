@@ -6,8 +6,6 @@ from dotenv import load_dotenv
 from typing import Dict, Any, Optional
 import time
 
-# this app sends the available positions to a WhatsApp Group
-
 # Load environment variables from .env file
 load_dotenv()
 
@@ -85,14 +83,12 @@ def format_message(item: Dict[str, Any]) -> str:
 def send_to_whatsapp_group(message: str) -> bool:
     """Send a message to the WhatsApp group using the group ID."""
     try:
-        # Add a delay to ensure WhatsApp Web is fully loaded
-        time.sleep(10)  # Wait for 10 seconds before sending the message
-
-        # Send the message with a longer wait_time
+        # Ensure WhatsApp Web has enough time to load
+        time.sleep(1)  # Reduced delay to 1 seconds
         kit.sendwhatmsg_to_group_instantly(
             group_id=WHATSAPP_GROUP_ID,
             message=message,
-            wait_time=20,  # Increase wait time to ensure instant sending
+            wait_time=1,  # Reduced wait_time to 1 seconds
             tab_close=True
         )
         logger.info("Message sent successfully!")
@@ -128,7 +124,6 @@ def main():
     if notion_data:
         for item in notion_data.get("results", []):
             send_status = item.get("properties", {}).get(SEND_STATUS_KEY, {}).get("status", {}).get("name", "")
-            logger.debug(f"Debug - Send Status: '{send_status}'")
             if send_status == "Not Sent":
                 # Format the message
                 message = format_message(item)

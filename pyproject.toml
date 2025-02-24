@@ -1,7 +1,7 @@
 [tool.poetry]
 package-mode = false
 name = "botagente"
-version = "0.1.0"
+version = "0.2.0"
 description = "A sample project"
 authors = ["John J Meza <johnometalmanldu@gmail.com>"]
 readme = "README.md"
@@ -13,6 +13,7 @@ requests = "^2.28.0"
 pyperclip = "^1.8.2"  # Cross-platform clipboard support
 pillow = "^10.0.0"    # Cross-platform image handling
 pyautogui = "^0.9.54" # Cross-platform GUI automation
+pywhatkit = "^5.4"    # Add pywhatkit here
 
 # Platform-specific dependencies
 pywin32 = {version = "^306", markers = "sys_platform == 'win32'"}  # Windows only
