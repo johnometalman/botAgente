@@ -35,7 +35,7 @@ def format_message(item):
     location = properties.get("Location", {}).get("rich_text", [{}])[0].get("text", {}).get("content", "No Location")
     remote = properties.get("Remote", {}).get("select", {}).get("name", "No Remote Info")
     vertical = properties.get("Vertical", {}).get("select", {}).get("name", "No Vertical Info")
-    ai_summary = properties.get("AI summary", {}).get("rich_text", [{}])[0].get("text", {}).get("content", "No AI Summary")
+    summary = properties.get("Summary", {}).get("rich_text", [{}])[0].get("text", {}).get("content", "No Summary")
     apply_url = properties.get("Apply URL", {}).get("url", "No Apply URL")
 
     # Format the message
@@ -46,7 +46,7 @@ def format_message(item):
         f"- 🏢 *Startup:* {startup}\n"
         f"- 🌍 *Ubicación:* {location} ({remote})\n"
         f"- 📂 *Vertical:* {vertical}\n"
-        f"- 🤖 *Resumen:* {ai_summary}\n\n"
+        f"- 🤖 *Resumen:* {summary}\n\n"
         f"- 📩 *Aplica aquí:* {apply_url}"
     )
     return message

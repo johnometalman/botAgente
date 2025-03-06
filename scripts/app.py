@@ -65,7 +65,7 @@ def format_message(item: Dict[str, Any]) -> str:
     location = get_property_value(properties, "Location", "No Location")
     remote = get_property_value(properties, "Remote", "No Remote Info")
     vertical = get_property_value(properties, "Vertical", "No Vertical Info")
-    ai_summary = get_property_value(properties, "AI summary", "No AI Summary")
+    summary = get_property_value(properties, "Summary", "No Summary")
     apply_url = get_property_value(properties, "Apply URL", "No Apply URL")
 
     # Format the message
@@ -75,7 +75,7 @@ def format_message(item: Dict[str, Any]) -> str:
         f"- 🏢 *Startup:* {startup}\n"
         f"- 🌍 *Ubicación:* {location} ({remote})\n"
         f"- 📂 *Vertical:* {vertical}\n"
-        f"- 🤖 *Resumen:* {ai_summary}\n\n"
+        f"- 🤖 *Resumen:* {summary}\n\n"
         f"- 📩 *Aplica aquí:* {apply_url}"
     )
     return message
