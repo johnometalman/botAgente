@@ -71,12 +71,11 @@ def format_message(item: Dict[str, Any]) -> str:
     # Format the message
     message = (
         f"📢 *Nueva oportunidad de trabajo*\n\n"
-        f"- 🔹 *Rol:* {role}\n\n"
-        f"- 🏢 *Startup:* {startup}\n"
         f"- 🌍 *Ubicación:* {location} ({remote})\n"
+        f"- 🔹 *Rol & Startup:* {role}\n\n"
         f"- 📂 *Vertical:* {vertical}\n"
         f"- 🤖 *Resumen:* {summary}\n\n"
-        f"- 📩 *Aplica aquí:* {apply_url}"
+        f"- 📩 *Revisala en:* https://job-posting.super.site/last"
     )
     return message
 
