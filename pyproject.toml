@@ -3,7 +3,7 @@ package-mode = false
 name = "botagente"
 version = "0.2.1"
 description = "A sample project"
-authors = ["John J Meza <johnometalmanldu@gmail.com>"]
+authors = ["John J Meza <www.johnometalman.me>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]

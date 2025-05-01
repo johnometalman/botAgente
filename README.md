@@ -58,11 +58,11 @@ py-files > pywhatkit > toreplace_corepy.py
 Once inside the virtual environment, you can run your Python scripts as usual:
 After setting up the files execute them, eg. `app.py` with:
 ```sh
-python py-files\pywhatkit\app.py
+python src\app.py
 ```
 Or, if using Poetry:
 ```sh
-poetry run python py-files\pywhatkit\app.py 
+poetry run src\app.py
 ```
 
 ---

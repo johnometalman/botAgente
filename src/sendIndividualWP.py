@@ -31,23 +31,18 @@ def format_message(item):
     """Format the message using the provided template."""
     properties = item.get("properties", {})
     role = properties.get("Role", {}).get("title", [{}])[0].get("text", {}).get("content", "No Role")
-    startup = properties.get("Startup", {}).get("rich_text", [{}])[0].get("text", {}).get("content", "No Startup")
     location = properties.get("Location", {}).get("rich_text", [{}])[0].get("text", {}).get("content", "No Location")
     remote = properties.get("Remote", {}).get("select", {}).get("name", "No Remote Info")
     vertical = properties.get("Vertical", {}).get("select", {}).get("name", "No Vertical Info")
     summary = properties.get("Summary", {}).get("rich_text", [{}])[0].get("text", {}).get("content", "No Summary")
-    apply_url = properties.get("Apply URL", {}).get("url", "No Apply URL")
 
     # Format the message
     message = (
-        f"📢 *Nueva oportunidad de trabajo*\n\n"
-
-        f"- 🔹 *Rol:* {role}\n\n"
-        f"- 🏢 *Startup:* {startup}\n"
-        f"- 🌍 *Ubicación:* {location} ({remote})\n"
-        f"- 📂 *Vertical:* {vertical}\n"
-        f"- 🤖 *Resumen:* {summary}\n\n"
-        f"- 📩 *Aplica aquí:* {apply_url}"
+        f"`{role}`\n\n"
+        f"- _{vertical}_\n"
+        f"- {location} *({remote})*\n\n"
+        f"- {summary}\n\n"
+        f"- 📩 *Revisala en:* https://job-posting.super.site/last"
     )
     return message
 
