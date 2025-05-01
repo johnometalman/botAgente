@@ -50,7 +50,7 @@ venv > lib > pywhatkit > core > core.py
 ```
 and **replace all the code** with code from the `toreplace_corepy.py` file
 ```sh
-py-files > pywhatkit > toreplace_corepy.py
+src > toreplace_corepy.py
 ```
 
 
