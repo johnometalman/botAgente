@@ -61,20 +61,18 @@ def format_message(item: Dict[str, Any]) -> str:
     """Format the message using the provided template."""
     properties = item.get("properties", {})
     role = get_property_value(properties, "Role", "No Role")
-    startup = get_property_value(properties, "Startup", "No Startup")
     location = get_property_value(properties, "Location", "No Location")
     remote = get_property_value(properties, "Remote", "No Remote Info")
     vertical = get_property_value(properties, "Vertical", "No Vertical Info")
     summary = get_property_value(properties, "Summary", "No Summary")
-    apply_url = get_property_value(properties, "Apply URL", "No Apply URL")
+
 
     # Format the message
     message = (
-        f"📢 *Nueva oportunidad de trabajo*\n\n"
-        f"- 🌍 *Ubicación:* {location} ({remote})\n"
-        f"- 🔹 *Rol & Startup:* {role}\n\n"
-        f"- 📂 *Vertical:* {vertical}\n"
-        f"- 🤖 *Resumen:* {summary}\n\n"
+        f"`{role}`\n\n"
+        f"- _{vertical}_\n"
+        f"- {location} *({remote})*\n\n"
+        f"- {summary}\n\n"
         f"- 📩 *Revisala en:* https://job-posting.super.site/last"
     )
     return message
@@ -83,11 +81,11 @@ def send_to_whatsapp_group(message: str) -> bool:
     """Send a message to the WhatsApp group using the group ID."""
     try:
         # Ensure WhatsApp Web has enough time to load
-        time.sleep(1)  # Reduced delay to 1 seconds
+        time.sleep(2)  # Reduced delay to 2 seconds
         kit.sendwhatmsg_to_group_instantly(
             group_id=WHATSAPP_GROUP_ID,
             message=message,
-            wait_time=1,  # Reduced wait_time to 1 seconds
+            wait_time=2,  # Reduced wait_time to 2 seconds
             tab_close=True
         )
         logger.info("Message sent successfully!")
